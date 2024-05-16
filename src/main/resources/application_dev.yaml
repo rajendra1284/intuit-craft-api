@@ -1,0 +1,68 @@
+server:
+  port: 8091
+
+spring:
+  application:
+  name: intuit-craft-api
+  datasource:
+    username: ${AWS_RDS_POSTGRES_USERNAME}
+    password: ${AWS_RDS_POSTGRES_PASSWORD}
+    url: ${AWS_RDS_POSTGRES_CONNECTION_STRING}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  cache:
+    cache-names: s3ObjectMetadata
+    caffeine:
+      spec: initialCapacity=10,maximumSize=50,expireAfterAccess=5m
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9080/
+          #jwk-set-uri: http://localhost:9080/jwks
+  async:
+    corePoolSize: 2
+    maxPoolSize: 4
+    queueCapacity: 500
+
+management:
+  endpoints:
+    web:
+      base-path: /
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  security:
+    enabled: false
+
+springdoc:
+  show-actuator: true
+  paths-to-exclude:
+    - /health/?*
+
+aws:
+  access:
+    key: ${AWS_ACCESS_KEY}
+  secret:
+    key: ${AWS_SECRET_KEY}
+  s3:
+    region: us-west-1
+    bucket: intuit-craft
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

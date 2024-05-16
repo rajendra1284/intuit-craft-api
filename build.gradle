@@ -1,0 +1,64 @@
+plugins {
+	id 'java'
+	id 'jacoco'
+	id 'org.springframework.boot' version '3.3.0-RC1'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.github.ksoichiro.console.reporter' version '0.6.3'
+}
+
+group = 'com.intuit.craft'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+def jacksonVersion = '2.17.1'
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-json'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.2.5'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
+	
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.5.0'
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.2.4'
+	implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.5'
+	
+	implementation 'software.amazon.awssdk:s3:2.25.50'
+	implementation 'org.apache.commons:commons-lang3'
+	
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
+	
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.2.5'
+	testImplementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.2.4'
+}
+
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
